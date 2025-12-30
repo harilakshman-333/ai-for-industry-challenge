@@ -1,0 +1,29 @@
+title: AI for Industry Challenge
+description: Team documentation for the Intrinsic AI for Industry Challenge
+theme: jekyll-theme-cayman
+show_downloads: false
+
+# GitHub repository
+repository: your-username/ai-for-industry-challenge
+
+# Navigation
+navigation:
+  - title: Home
+    url: /
+  - title: Strategy
+    url: /technical-strategy
+  - title: Setup
+    url: /setup
+  - title: Team
+    url: /team
+
+# Plugins
+plugins:
+  - jekyll-relative-links
+  - jekyll-seo-tag
+
+# Markdown settings
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
