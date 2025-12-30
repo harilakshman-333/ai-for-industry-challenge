@@ -31,21 +31,31 @@ RUN apt-get update && apt-get install -y \
     ros-${ROS_DISTRO}-rviz2 \
     && rm -rf /var/lib/apt/lists/*
 
+# Upgrade pip first
+RUN pip3 install --upgrade pip
+
 # Install Python packages for ML/AI
 RUN pip3 install --no-cache-dir \
-    torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu \
     numpy \
     scipy \
     matplotlib \
-    seaborn \
-    opencv-contrib-python \
     scikit-learn \
     pandas \
+    opencv-contrib-python \
+    transforms3d
+
+# Install PyTorch (CPU version)
+RUN pip3 install --no-cache-dir \
+    torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+
+# Install RL and visualization packages
+RUN pip3 install --no-cache-dir \
     tensorboard \
     gymnasium \
-    stable-baselines3 \
-    open3d \
-    transforms3d
+    stable-baselines3[extra]
+
+# Install 3D visualization (optional, can be heavy)
+RUN pip3 install --no-cache-dir open3d || echo "open3d installation skipped"
 
 # Create workspace
 RUN mkdir -p ${WORKSPACE}/src
