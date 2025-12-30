@@ -16,13 +16,6 @@ The **AI for Industry Challenge** is an open competition organized by **Intrinsi
 - **Challenge Start:** February 11, 2026
 - **Duration:** ~6 months (Feb–July/Aug 2026)
 
-### Prize Pool: $180,000
-
-- 🥇 **1st Place:** $100,000
-- 🥈 **2nd Place:** $40,000
-- 🥉 **3rd Place:** $20,000
-- 🏅 **4th & 5th:** $10,000 each
-
 ## 🏗️ Challenge Structure
 
 ### Phase 0: Qualification (Simulation)
