@@ -3,6 +3,10 @@
 
 set -e
 
+# Source ROS 2 environment
+echo "Sourcing ROS 2 environment..."
+source /opt/ros/humble/setup.bash
+
 cd /workspace
 
 echo "Installing dependencies..."
@@ -15,3 +19,4 @@ echo "Sourcing workspace..."
 source install/setup.bash
 
 echo "Build complete!"
+echo "To use the workspace, run: source /workspace/install/setup.bash"
