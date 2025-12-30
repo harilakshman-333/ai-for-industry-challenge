@@ -44,8 +44,8 @@ RUN pip3 install --no-cache-dir \
     opencv-contrib-python \
     transforms3d
 
-# Install PyTorch (CPU version)
-RUN pip3 install --no-cache-dir \
+# Install PyTorch (CPU version) - ignore system packages to avoid conflicts
+RUN pip3 install --no-cache-dir --ignore-installed sympy \
     torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
 
 # Install RL and visualization packages
