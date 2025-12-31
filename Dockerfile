@@ -34,9 +34,9 @@ RUN apt-get update && apt-get install -y \
 # Upgrade pip first
 RUN pip3 install --upgrade pip
 
-# Install Python packages for ML/AI
+# Install Python packages for ML/AI (NumPy 1.x for cv_bridge compatibility)
 RUN pip3 install --no-cache-dir \
-    numpy \
+    "numpy<2" \
     scipy \
     matplotlib \
     scikit-learn \

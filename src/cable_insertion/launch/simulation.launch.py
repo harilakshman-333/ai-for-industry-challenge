@@ -3,24 +3,37 @@
 Launch file for cable insertion simulation in Gazebo
 """
 
+import os
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
+from launch.substitutions import LaunchConfiguration, PathJoinSubstitution, Command
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
+from ament_index_python.packages import get_package_share_directory
 
 
 def generate_launch_description():
     # Declare arguments
     use_sim_time = LaunchConfiguration('use_sim_time', default='true')
-    gui = LaunchConfiguration('gui', default='true')
+    gui = LaunchConfiguration('gui', default='false')  # Default to headless
     world = LaunchConfiguration('world', default='cable_insertion.world')
     
     # Package directories
     pkg_gazebo_ros = FindPackageShare('gazebo_ros')
     pkg_cable_insertion = FindPackageShare('cable_insertion')
+    
+    # Get URDF file path
+    urdf_file = os.path.join(
+        get_package_share_directory('cable_insertion'),
+        'urdf',
+        'simple_robot.urdf'
+    )
+    
+    # Read robot description
+    with open(urdf_file, 'r') as infp:
+        robot_desc = infp.read()
     
     # World file path
     world_file = PathJoinSubstitution([
@@ -40,7 +53,7 @@ def generate_launch_description():
         }.items()
     )
     
-    # Gazebo client (GUI)
+    # Gazebo client (GUI) - only if gui=true
     gazebo_client = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
             PathJoinSubstitution([pkg_gazebo_ros, 'launch', 'gzclient.launch.py'])
@@ -56,7 +69,7 @@ def generate_launch_description():
         output='screen',
         parameters=[{
             'use_sim_time': use_sim_time,
-            'robot_description': ''  # Will be loaded from URDF
+            'robot_description': robot_desc
         }]
     )
     
@@ -106,23 +119,9 @@ def generate_launch_description():
         }]
     )
     
-    # RViz
-    rviz_node = Node(
-        package='rviz2',
-        executable='rviz2',
-        name='rviz2',
-        output='screen',
-        arguments=['-d', PathJoinSubstitution([
-            pkg_cable_insertion,
-            'config',
-            'cable_insertion.rviz'
-        ])],
-        condition=IfCondition(gui)
-    )
-    
     return LaunchDescription([
         DeclareLaunchArgument('use_sim_time', default_value='true'),
-        DeclareLaunchArgument('gui', default_value='true'),
+        DeclareLaunchArgument('gui', default_value='false'),  # Headless by default
         DeclareLaunchArgument('world', default_value='cable_insertion.world'),
         
         gazebo_server,
@@ -131,6 +130,5 @@ def generate_launch_description():
         perception_node,
         planning_node,
         control_node,
-        safety_monitor,
-        rviz_node
+        safety_monitor
     ])
